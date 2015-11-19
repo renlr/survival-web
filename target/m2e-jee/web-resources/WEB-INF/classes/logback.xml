@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="USER_HOME" value="/home/javalogs/" />
+	<!-- 定义控制台输出 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>[core-web]%d{yyyy-MM-dd HH:mm:ss.sss} %F %M %m%n</pattern>
+		</layout>
+	</appender>
+	<!-- INFO -->
+	<appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${USER_HOME}/site-web.log</File>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<OnMatch>ACCEPT</OnMatch>
+			<OnMismatch>DENY</OnMismatch>
+		</filter>
+		<Encoding>GBK</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${USER_HOME}/site-web.log.%d{yyyy-MM-dd}</FileNamePattern>
+			<!-- 超过MaxHistory之前的删除 -->
+			<MaxHistory>15</MaxHistory>
+		</rollingPolicy>
+		<layout>
+			<Pattern>[core-web]%d{yyyy-MM-dd HH:mm:ss.sss} %F %M %m%n</Pattern>
+		</layout>
+	</appender>
+
+	<!-- WARN -->
+	<appender name="warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${USER_HOME}/site-web_warn.log</File>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<OnMatch>ACCEPT</OnMatch>
+			<OnMismatch>DENY</OnMismatch>
+		</filter>
+		<Encoding>GBK</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${USER_HOME}/site-web_warn.log.%d{yyyy-MM-dd}</FileNamePattern>
+			<!-- 超过MaxHistory之前的删除 -->
+			<MaxHistory>15</MaxHistory>
+		</rollingPolicy>
+		<layout>
+			<Pattern>[core-web]%d{yyyy-MM-dd HH:mm:ss.sss} %F %M %m%n</Pattern>
+		</layout>
+	</appender>
+
+	<!-- ERROR -->
+	<appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${USER_HOME}/site-web_error.log</File>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<OnMatch>ACCEPT</OnMatch>
+			<OnMismatch>DENY</OnMismatch>
+		</filter>
+		<Encoding>GBK</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${USER_HOME}/site-web_error.log.%d{yyyy-MM-dd}</FileNamePattern>
+			<!-- 超过MaxHistory之前的删除 -->
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<layout>
+			<Pattern>[core-web]%d{yyyy-MM-dd HH:mm:ss.sss} %m%n</Pattern>
+		</layout>
+	</appender>
+	
+	<logger name="org.hibernate" level="info" />
+	<logger name="org.hibernate.cache" level="info" />
+	<logger name="org.hibernate.tool.hbm2ddl" level="info" />
+	
+	<root level="DEBUG">
+		<appender-ref ref="info" />
+		<appender-ref ref="warn" />
+		<appender-ref ref="error" />
+		<appender-ref ref="console" />
+	</root>
+</configuration>

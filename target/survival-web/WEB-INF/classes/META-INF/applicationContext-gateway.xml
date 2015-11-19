@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+        http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<!-- 设置连接, 读超时时间 -->
+	<http-conf:conduit name="*.http-conduit">
+		<http-conf:client ConnectionTimeout="5000"
+			ReceiveTimeout="30000" />
+	</http-conf:conduit>
+
+	<bean id="receiveOrderAPI" class="com.shengpay.cardpay.common.api.payment.service.ReceiveOrderAPI" factory-bean="receiveOrderFactory" factory-method="create" />
+	<bean id="receiveOrderFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" p:serviceClass="com.shengpay.cardpay.common.api.payment.service.ReceiveOrderAPI"
+		p:address="http://cardpay.shengpay.com/api-acquire-channel/services/receiveOrderService" />
+
+	<bean id="paymentAPI" class="com.shengpay.cardpay.common.api.payment.service.PaymentAPI" factory-bean="paymentFactory" factory-method="create" />
+	<bean id="paymentFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" p:serviceClass="com.shengpay.cardpay.common.api.payment.service.PaymentAPI"
+		p:address="http://cardpay.shengpay.com/api-acquire-channel/services/paymentService" />
+
+	<bean id="refundAPI" class="com.shengpay.cardpay.common.api.refund.service.RefundAPI" factory-bean="refundOrderFactory" factory-method="create" />
+	<bean id="refundOrderFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" p:serviceClass="com.shengpay.cardpay.common.api.refund.service.RefundAPI"
+		p:address="http://cardpay.shengpay.com/api-acquire-channel/services/refundService" />
+
+	<bean id="queryOrderAPI" class="com.shengpay.cardpay.common.api.query.order.service.QueryOrderAPI" factory-bean="queryOrderFactory" factory-method="create" />
+	<bean id="queryOrderFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" p:serviceClass="com.shengpay.cardpay.common.api.query.order.service.QueryOrderAPI"
+		p:address="http://cardpay.shengpay.com/api-acquire-channel/services/queryOrderService" />
+
+	<bean id="refundQueryAPI" class="com.shengpay.cardpay.common.api.refund.service.RefundQueryAPI" factory-bean="queryRefundFactory" factory-method="create" />
+	<bean id="queryRefundFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" p:serviceClass="com.shengpay.cardpay.common.api.refund.service.RefundQueryAPI"
+		p:address="http://cardpay.shengpay.com/api-acquire-channel/services/refundQueryService" />
+
+	<bean id="sharingAPI" class="com.shengpay.cardpay.common.api.sharing40.service.SharingServices" factory-bean="sharingAPIFactory" factory-method="create" />
+	<bean id="sharingAPIFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" p:serviceClass="com.shengpay.cardpay.common.api.sharing40.service.SharingServices"
+		p:address="http://cardpay.shengpay.com/api-acquire-channel/services/sharing" />
+
+</beans>
